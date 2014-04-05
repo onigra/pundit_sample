@@ -5,7 +5,7 @@ shared_examples "User indexができる" do
   before { get :index }
   subject { assigns(:users) }
 
-  it { should eq [user] }
+  it { should include user }
   it_behaves_like 'http code', 200
 end
 
@@ -15,20 +15,24 @@ shared_examples "User indexができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # show 
 #
 shared_examples "User showができる" do
-  context "GET show" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :show, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
-    end
-  end
+  before { get :show, id: user.to_param }
+  subject { assigns(:user) }
+
+  it { should eq user }
+  it_behaves_like 'http code', 200
 end
 
+shared_examples "User showができない" do
+  before { get :show, id: user.to_param }
+
+  it_behaves_like 'http code', 404
+end
+
+=begin
 #
 # new
 #
