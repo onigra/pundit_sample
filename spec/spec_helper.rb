@@ -27,4 +27,6 @@ RSpec.configure do |config|
   config.after :each do
     DatabaseRewinder.clean
   end
+
+  config.include Devise::TestHelpers, type: :controller
 end
