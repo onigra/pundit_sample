@@ -65,49 +65,65 @@ shared_examples "User editができない" do
 
   it_behaves_like 'http code', 404
 end
-=begin
+
 #
 # create
 #
 shared_examples "User createができる" do
-  context "POST create" do
-    context "with valid params" do
-      it "creates a new User" do
-        expect {
-          post :create, {:user => valid_attributes}, valid_session
-        }.to change(User, :count).by(1)
-      end
+  context "with valid params" do
+    before { post :create, { :user => valid_attributes } }
 
-      it "assigns a newly created user as @user" do
-        post :create, {:user => valid_attributes}, valid_session
-        assigns(:user).should be_a(User)
-        assigns(:user).should be_persisted
-      end
+    it_behaves_like 'http code', 302
 
-      it "redirects to the created user" do
-        post :create, {:user => valid_attributes}, valid_session
-        response.should redirect_to(User.last)
-      end
+    context "creates a new User" do
+      subject { User.count }
+
+      it { should eq 2 }
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved user as @user" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { "name" => "invalid value" }}, valid_session
-        assigns(:user).should be_a_new(User)
-      end
+    context "assigns a newly created user as @user" do
+      subject { assigns(:user) }
 
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        post :create, {:user => { "name" => "invalid value" }}, valid_session
-        response.should render_template("new")
-      end
+      it { should be_a(User) }
+      it { should be_persisted }
+    end
+
+    context "redirects to the created user" do
+      subject { response }
+
+      it { should redirect_to(User.last) }
+    end
+  end
+
+  context "with invalid params" do
+    before do
+      User.any_instance.stub(:save).and_return(false)
+      post :create, { :user => { "name" => "invalid value" } }
+    end
+
+    it_behaves_like 'http code', 200
+
+    context "assigns a newly created but unsaved user as @user" do
+      subject { assigns(:user) }
+
+      it { should be_a_new(User) }
+    end
+
+    context "re-renders the 'new' template" do
+      subject { response }
+
+      it { should render_template("new") }
     end
   end
 end
 
+shared_examples "User createができない" do
+  before { post :create, { :user => valid_attributes } }
+
+  it_behaves_like 'http code', 404
+end
+
+=begin
 #
 # update
 #

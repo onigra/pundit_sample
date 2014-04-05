@@ -29,3 +29,14 @@ Fabricator :role_role, class_name: Role do
     Fabricate(:roles_ability, :role_id => r.id, :ability_id => Fabricate(:role_destroy).id)
   end
 end
+
+Fabricator :only_view_role, class_name: Role do
+  name '参照権限'
+
+  after_create do |r|
+    Fabricate(:roles_ability, :role_id => r.id, :ability_id => Fabricate(:user_index).id)
+    Fabricate(:roles_ability, :role_id => r.id, :ability_id => Fabricate(:user_show).id)
+    Fabricate(:roles_ability, :role_id => r.id, :ability_id => Fabricate(:role_index).id)
+    Fabricate(:roles_ability, :role_id => r.id, :ability_id => Fabricate(:role_show).id)
+  end
+end
