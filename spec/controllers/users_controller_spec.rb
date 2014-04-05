@@ -62,4 +62,24 @@ describe UsersController do
       it_behaves_like "User newができない"
     end
   end
+
+  #
+  # edit
+  #
+  describe 'GET /users/:id/edit', '#edit' do
+    context '管理者' do
+      include_context "管理者でログイン"
+      it_behaves_like "User editができる"
+    end
+
+    context '権限保持者' do
+      include_context "User権限保持者でログイン"
+      it_behaves_like "User editができる"
+    end
+
+    context '権限非保持者' do
+      include_context "Role権限保持者でログイン"
+      it_behaves_like "User editができない"
+    end
+  end
 end

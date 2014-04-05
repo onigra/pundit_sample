@@ -49,20 +49,23 @@ shared_examples "User newができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # edit
 #
 shared_examples "User editができる" do
-  context "GET edit" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :edit, {:id => user.to_param}, valid_session
-      assigns(:user).should eq(user)
-    end
-  end
+  before { get :edit, id: user.to_param }
+  subject { assigns(:user) }
+
+  it { should eq user }
+  it_behaves_like 'http code', 200
 end
 
+shared_examples "User editができない" do
+  before { get :edit, id: user.to_param }
+
+  it_behaves_like 'http code', 404
+end
+=begin
 #
 # create
 #
