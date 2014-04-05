@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
 
     return h
   end
+
+  def admin?
+    ability.include? 'admin'
+  end
 end

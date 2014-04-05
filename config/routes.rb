@@ -3,4 +3,5 @@ PunditSample::Application.routes.draw do
   root to: "users#index"
   resources :roles
   resources :users
+  get '*not_found' => 'application#render_404'
 end
