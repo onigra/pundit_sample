@@ -32,6 +32,7 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+gem 'devise'
 gem 'pundit'
 gem 'seed-fu', github: 'mbleigh/seed-fu'
 

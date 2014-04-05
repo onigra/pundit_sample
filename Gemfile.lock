@@ -47,6 +47,7 @@ GEM
     arel (4.0.2)
     atomic (1.1.16)
     awesome_print (1.2.0)
+    bcrypt (3.1.7)
     better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -77,6 +78,12 @@ GEM
     database_rewinder (0.0.3)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
+    devise (3.2.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     em-websocket (0.5.0)
       eventmachine (>= 0.12.9)
@@ -127,6 +134,7 @@ GEM
     multi_json (1.9.2)
     mysql2 (0.3.15)
     nio4r (1.0.0)
+    orm_adapter (0.5.0)
     polyglot (0.3.4)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -227,6 +235,8 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     uniform_notifier (1.4.0)
+    warden (1.2.3)
+      rack (>= 1.0)
     yard (0.8.7.4)
 
 PLATFORMS
@@ -242,6 +252,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.0.0)
   database_rewinder
+  devise
   fabrication
   forgery
   growl
