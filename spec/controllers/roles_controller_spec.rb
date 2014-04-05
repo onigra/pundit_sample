@@ -3,10 +3,20 @@ require 'spec_helper'
 describe RolesController do
   let(:only_view_role) { Fabricate(:only_view_role) }
 
+  let(:foo_index) { Fabricate(:foo_index) }
+  let(:foo_show) { Fabricate(:foo_show) }
+  let(:foo_create) { Fabricate(:foo_create) }
+  let(:foo_update) { Fabricate(:foo_update) }
+  let(:foo_destroy) { Fabricate(:foo_destroy) }
 
   let(:valid_attributes) do
     {
-      "name" => ''
+      name: "foo権限保持者",
+      roles_abilities_attributes: [
+        { ability_id: foo_index.to_param },
+        { ability_id: foo_show.to_param },
+        { ability_id: foo_create.to_param }
+      ]
     }
   end
 
@@ -96,7 +106,6 @@ describe RolesController do
     end
   end
 
-=begin
   #
   # create
   #
@@ -117,6 +126,7 @@ describe RolesController do
     end
   end
 
+=begin
   #
   # update
   #

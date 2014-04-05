@@ -66,7 +66,6 @@ shared_examples "Role editができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # create
 #
@@ -79,7 +78,7 @@ shared_examples "Role createができる" do
     context "creates a new Role" do
       subject { Role.count }
 
-      it { should eq 3 }
+      it { should eq 2 }
     end
 
     context "assigns a newly created role as @role" do
@@ -87,6 +86,28 @@ shared_examples "Role createができる" do
 
       it { should be_a Role }
       it { should be_persisted }
+    end
+
+    context "inside @role" do
+      it { expect(assigns(:role).name).to eq valid_attributes[:name] }
+
+      context 'ability' do
+        subject { assigns(:role).ability }
+
+        it { should include foo_index.domain }
+
+        context 'inside ability' do
+          subject { assigns(:role).ability[foo_index.domain] }
+
+          it do
+            should include(
+              { foo_index.ability => foo_index.id },
+              { foo_show.ability => foo_show.id },
+              { foo_create.ability => foo_create.id }
+            )
+          end
+        end
+      end
     end
 
     context "redirects to the created role" do
@@ -124,6 +145,7 @@ shared_examples "Role createができない" do
   it_behaves_like 'http code', 404
 end
 
+=begin
 #
 # update
 #

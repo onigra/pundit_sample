@@ -57,7 +57,12 @@ class RolesController < ApplicationController
     end
 
     def role_params
-      params.require(:role).permit(:name)
+      params.require(:role).permit(
+        :name,
+        roles_abilities_attributes: [
+          :ability_id
+        ]
+      )
     end
 
     def pundit_auth

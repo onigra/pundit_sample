@@ -55,3 +55,29 @@ Fabricator :role_destroy, class_name: Ability do
   domain 'role'
   ability 'destroy'
 end
+
+# roleのテスト用の適当なドメインの権限
+Fabricator :foo_index, class_name: Ability do
+  domain 'foo'
+  ability 'index'
+end
+
+Fabricator :foo_show, class_name: Ability do
+  domain 'foo'
+  ability 'show'
+end
+
+Fabricator :foo_create, class_name: Ability do
+  domain 'foo'
+  ability 'create'
+end
+
+Fabricator :foo_update, class_name: Ability do
+  domain 'foo'
+  ability 'update'
+end
+
+Fabricator :foo_destroy, class_name: Ability do
+  domain 'foo'
+  ability 'destroy'
+end
