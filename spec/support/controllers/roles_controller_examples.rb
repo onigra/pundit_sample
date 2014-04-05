@@ -15,24 +15,24 @@ shared_examples "Role indexができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # show 
 #
 shared_examples "Role showができる" do
-  before { get :show, id: role.to_param }
+  before { get :show, id: only_view_role.to_param }
   subject { assigns(:role) }
 
-  it { should eq role }
+  it { should eq only_view_role }
   it_behaves_like 'http code', 200
 end
 
 shared_examples "Role showができない" do
-  before { get :show, id: role.to_param }
+  before { get :show, id: only_view_role.to_param }
 
   it_behaves_like 'http code', 404
 end
 
+=begin
 #
 # new
 #

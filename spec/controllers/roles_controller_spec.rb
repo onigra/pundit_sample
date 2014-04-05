@@ -36,7 +36,6 @@ describe RolesController do
     end
   end
 
-=begin
   #
   # show
   #
@@ -57,6 +56,7 @@ describe RolesController do
     end
   end
 
+=begin
   #
   # new
   #
