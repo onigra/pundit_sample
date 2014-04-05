@@ -32,7 +32,6 @@ shared_examples "Role showができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # new
 #
@@ -50,6 +49,7 @@ shared_examples "Role newができない" do
   it_behaves_like 'http code', 404
 end
 
+=begin
 #
 # edit
 #
