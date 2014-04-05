@@ -1,5 +1,6 @@
 require 'spec_helper'
 
 describe RolesAbility do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to(:role) }
+  it { should belong_to(:ability) }
 end

@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe Ability do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should have_many(:roles).through(:roles_abilities) }
 end
