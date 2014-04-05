@@ -146,7 +146,6 @@ describe RolesController do
     end
   end
 
-=begin
   #
   # destroy
   #
@@ -166,5 +165,4 @@ describe RolesController do
       it_behaves_like "Role destroyができない"
     end
   end
-=end
 end

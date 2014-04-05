@@ -204,12 +204,11 @@ shared_examples "Role updateができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # destroy
 #
 shared_examples "Role destroyができる" do
-  before { delete :destroy, { id: has_only_view_authority.to_param } }
+  before { delete :destroy, { id: only_view_role.to_param } }
 
   context "destroys the requested role" do
     subject { Role.count }
@@ -225,8 +224,7 @@ shared_examples "Role destroyができる" do
 end
 
 shared_examples "Role destroyができない" do
-  before { delete :destroy, { id: has_only_view_authority.to_param } }
+  before { delete :destroy, { id: only_view_role.to_param } }
 
   it_behaves_like 'http code', 404
 end
-=end
