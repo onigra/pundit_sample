@@ -12,6 +12,12 @@ describe UsersController do
     }
   end
 
+  let(:update_attributes) do
+    {
+      "name" => "update_name"
+    }
+  end
+
   #
   # index
   #
@@ -109,6 +115,26 @@ describe UsersController do
     context '権限非保持者' do
       include_context "Role権限保持者でログイン"
       it_behaves_like "User createができない"
+    end
+  end
+
+  #
+  # update
+  #
+  describe 'PATCH/PUT /users/:id', '#update' do
+    context '管理者' do
+      include_context "管理者でログイン"
+      it_behaves_like "User updateができる"
+    end
+
+    context '権限保持者' do
+      include_context "User権限保持者でログイン"
+      it_behaves_like "User updateができる"
+    end
+
+    context '権限非保持者' do
+      include_context "Role権限保持者でログイン"
+      it_behaves_like "User updateができない"
     end
   end
 end

@@ -123,56 +123,65 @@ shared_examples "User createができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # update
 #
 shared_examples "User updateができる" do
-  context "PUT update" do
-    context "with valid params" do
-      it "updates the requested user" do
-        user = User.create! valid_attributes
-        # Assuming there are no other users in the database, this
-        # specifies that the User created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        User.any_instance.should_receive(:update).with({ "name" => "MyString" })
-        put :update, {:id => user.to_param, :user => { "name" => "MyString" }}, valid_session
-      end
-
-      it "assigns the requested user as @user" do
-        user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        assigns(:user).should eq(user)
-      end
-
-      it "redirects to the user" do
-        user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => valid_attributes}, valid_session
-        response.should redirect_to(user)
-      end
+  context "with valid params" do
+    before do
+      put :update, { :id => user.to_param, :user => update_attributes }
+      user.reload
     end
 
-    context "with invalid params" do
-      it "assigns the user as @user" do
-        user = User.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => { "name" => "invalid value" }}, valid_session
-        assigns(:user).should eq(user)
-      end
+    it_behaves_like 'http code', 302
 
-      it "re-renders the 'edit' template" do
-        user = User.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        User.any_instance.stub(:save).and_return(false)
-        put :update, {:id => user.to_param, :user => { "name" => "invalid value" }}, valid_session
-        response.should render_template("edit")
-      end
+    context "updates the requested user" do
+      subject { user.name }
+
+      it { should eq update_attributes["name"] }
+    end
+
+    context "assigns the requested user as @user" do
+      subject { assigns(:user) }
+
+      it { should eq user }
+    end
+
+    context "redirects to the user" do
+      subject { response }
+
+      it { should redirect_to user }
+    end
+  end
+
+  context "with invalid params" do
+    before do
+      User.any_instance.stub(:save).and_return(false)
+      put :update, { :id => user.to_param, :user => { "name" => "invalid value" } }
+    end
+
+    it_behaves_like 'http code', 200
+
+    context "assigns the user as @user" do
+      subject { assigns(:user) }
+
+      it { should eq user }
+    end
+
+    context "re-renders the 'edit' template" do
+      subject { response }
+
+      it { should render_template("edit") }
     end
   end
 end
 
+shared_examples "User updateができない" do
+  before { put :update, { :id => user.to_param, :user => update_attributes } }
+
+  it_behaves_like 'http code', 404
+end
+=begin
 #
 # destroy
 #
