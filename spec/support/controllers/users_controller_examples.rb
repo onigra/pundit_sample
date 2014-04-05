@@ -71,7 +71,7 @@ end
 #
 shared_examples "User createができる" do
   context "with valid params" do
-    before { post :create, { :user => valid_attributes } }
+    before { post :create, { user: valid_attributes } }
 
     it_behaves_like 'http code', 302
 
@@ -84,21 +84,21 @@ shared_examples "User createができる" do
     context "assigns a newly created user as @user" do
       subject { assigns(:user) }
 
-      it { should be_a(User) }
+      it { should be_a User }
       it { should be_persisted }
     end
 
     context "redirects to the created user" do
       subject { response }
 
-      it { should redirect_to(User.last) }
+      it { should redirect_to User.last }
     end
   end
 
   context "with invalid params" do
     before do
       User.any_instance.stub(:save).and_return(false)
-      post :create, { :user => { "name" => "invalid value" } }
+      post :create, { user: { "name" => "invalid value" } }
     end
 
     it_behaves_like 'http code', 200
@@ -106,7 +106,7 @@ shared_examples "User createができる" do
     context "assigns a newly created but unsaved user as @user" do
       subject { assigns(:user) }
 
-      it { should be_a_new(User) }
+      it { should be_a_new User }
     end
 
     context "re-renders the 'new' template" do
@@ -118,7 +118,7 @@ shared_examples "User createができる" do
 end
 
 shared_examples "User createができない" do
-  before { post :create, { :user => valid_attributes } }
+  before { post :create, { user: valid_attributes } }
 
   it_behaves_like 'http code', 404
 end
@@ -129,7 +129,7 @@ end
 shared_examples "User updateができる" do
   context "with valid params" do
     before do
-      put :update, { :id => user.to_param, :user => update_attributes }
+      put :update, { id: user.to_param, user: update_attributes }
       user.reload
     end
 
@@ -157,7 +157,7 @@ shared_examples "User updateができる" do
   context "with invalid params" do
     before do
       User.any_instance.stub(:save).and_return(false)
-      put :update, { :id => user.to_param, :user => { "name" => "invalid value" } }
+      put :update, { id: user.to_param, user: { "name" => "invalid value" } }
     end
 
     it_behaves_like 'http code', 200
@@ -177,7 +177,7 @@ shared_examples "User updateができる" do
 end
 
 shared_examples "User updateができない" do
-  before { put :update, { :id => user.to_param, :user => update_attributes } }
+  before { put :update, { id: user.to_param, user: update_attributes } }
 
   it_behaves_like 'http code', 404
 end
