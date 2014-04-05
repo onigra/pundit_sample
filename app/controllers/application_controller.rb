@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
       logger.info "Rendering 404 with exception: #{exception.message}"
     end
 
-    render file: "#{Rails.root}/public/404.html", status: 404, layout: 'application', content_type: 'text/html'
+    render file: "#{Rails.root}/public/404.html", status: 404, content_type: 'text/html'
   end
 end
