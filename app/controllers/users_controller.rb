@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  before_action :pundit_auth
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
-    authorize User.new
     @users = User.all
   end
 
@@ -54,10 +54,13 @@ class UsersController < ApplicationController
   private
     def set_user
       @user = User.find(params[:id])
-      authorize @user
     end
 
     def user_params
       params.require(:user).permit(:name, :role_id)
+    end
+
+    def pundit_auth
+      authorize User.new
     end
 end
