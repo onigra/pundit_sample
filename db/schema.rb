@@ -11,13 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140405052642) do
+ActiveRecord::Schema.define(version: 20140405053043) do
+
+  create_table "abilities", force: true do |t|
+    t.string   "domain"
+    t.string   "ability"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "roles", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "roles_abilities", force: true do |t|
+    t.integer  "role_id"
+    t.integer  "ability_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles_abilities", ["ability_id"], name: "index_roles_abilities_on_ability_id", using: :btree
+  add_index "roles_abilities", ["role_id"], name: "index_roles_abilities_on_role_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
