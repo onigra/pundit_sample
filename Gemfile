@@ -32,6 +32,40 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+gem 'pundit'
+gem 'seed-fu', github: 'mbleigh/seed-fu'
+
+group :test, :development do
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'rake_shared_context'
+  gem 'accept_values_for'
+
+  gem 'database_rewinder'
+  gem 'fabrication'
+  gem 'forgery'
+
+  gem 'guard-rspec'
+  gem 'guard-livereload'
+  gem 'growl'
+
+  gem 'byebug'
+  gem 'awesome_print'
+  gem 'pry-rails'
+  gem 'pry-coolline'
+  gem 'pry-doc'
+  gem 'pry-byebug'
+  gem 'pry-stack_explorer'
+  gem 'pry-remote'
+  gem 'tapp'
+
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem "annotate", github: "ctran/annotate_models"
+  gem 'bullet'
+end
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
