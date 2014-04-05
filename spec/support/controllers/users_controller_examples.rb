@@ -32,19 +32,24 @@ shared_examples "User showができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # new
 #
 shared_examples "User newができる" do
-  context "GET new" do
-    it "assigns a new user as @user" do
-      get :new, {}, valid_session
-      assigns(:user).should be_a_new(User)
-    end
-  end
+  before { get :new }
+  subject { assigns(:user) }
+
+  it { should be_a_new(User) }
+  it_behaves_like 'http code', 200
 end
 
+shared_examples "User newができない" do
+  before { get :new }
+
+  it_behaves_like 'http code', 404
+end
+
+=begin
 #
 # edit
 #
