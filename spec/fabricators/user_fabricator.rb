@@ -18,3 +18,10 @@ Fabricator :has_role_authority, class_name: User do
   email    { Forgery(:email).address }
   password { Forgery(:basic).password(:at_least => 9, :at_most => 10) }
 end
+
+Fabricator :has_only_view_authority, class_name: User do
+  name { "#{Forgery(:internet).user_name}#{Fabricate.sequence}" }
+  role_id { Fabricate(:only_view_role).id }
+  email    { Forgery(:email).address }
+  password { Forgery(:basic).password(:at_least => 9, :at_most => 10) }
+end

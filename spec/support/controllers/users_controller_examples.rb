@@ -78,7 +78,7 @@ shared_examples "User createができる" do
     context "creates a new User" do
       subject { User.count }
 
-      it { should eq 2 }
+      it { should eq 3 }
     end
 
     context "assigns a newly created user as @user" do
@@ -181,24 +181,28 @@ shared_examples "User updateができない" do
 
   it_behaves_like 'http code', 404
 end
-=begin
+
 #
 # destroy
 #
 shared_examples "User destroyができる" do
-  context "DELETE destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
-      expect {
-        delete :destroy, {:id => user.to_param}, valid_session
-      }.to change(User, :count).by(-1)
-    end
+  before { delete :destroy, { id: has_only_view_authority.to_param } }
 
-    it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete :destroy, {:id => user.to_param}, valid_session
-      response.should redirect_to(users_url)
-    end
+  context "destroys the requested user" do
+    subject { User.count }
+
+    it { should eq 1 }
+  end
+
+  context "redirects to the users list" do
+    subject { response }
+
+    it { should redirect_to users_url }
   end
 end
-=end
+
+shared_examples "User destroyができない" do
+  before { delete :destroy, { id: has_only_view_authority.to_param } }
+
+  it_behaves_like 'http code', 404
+end

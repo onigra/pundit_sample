@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe UsersController do
-  let(:only_view_role) { Fabricate(:only_view_role) }
+  let(:has_only_view_authority) { Fabricate(:has_only_view_authority) }
 
   let(:valid_attributes) do
     {
       "name" => Forgery(:internet).user_name,
       "email" => Forgery(:email).address,
       "password" => Forgery(:basic).password(:at_least => 9, :at_most => 10),
-      "role_id" => only_view_role.to_param
+      "role_id" => has_only_view_authority.role_id.to_s
     }
   end
 
@@ -135,6 +135,26 @@ describe UsersController do
     context '権限非保持者' do
       include_context "Role権限保持者でログイン"
       it_behaves_like "User updateができない"
+    end
+  end
+
+  #
+  # destroy
+  #
+  describe 'DELETE /users/:id', '#destroy' do
+    context '管理者' do
+      include_context "管理者でログイン"
+      it_behaves_like "User destroyができる"
+    end
+
+    context '権限保持者' do
+      include_context "User権限保持者でログイン"
+      it_behaves_like "User destroyができる"
+    end
+
+    context '権限非保持者' do
+      include_context "Role権限保持者でログイン"
+      it_behaves_like "User destroyができない"
     end
   end
 end
