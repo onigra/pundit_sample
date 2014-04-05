@@ -1,5 +1,6 @@
 class RolesController < ApplicationController
   before_action :authenticate_user!
+  before_action :pundit_auth
   before_action :set_role, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -57,5 +58,9 @@ class RolesController < ApplicationController
 
     def role_params
       params.require(:role).permit(:name)
+    end
+
+    def pundit_auth
+      authorize Role.new
     end
 end
