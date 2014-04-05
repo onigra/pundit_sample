@@ -145,42 +145,41 @@ shared_examples "Role createができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # update
 #
 shared_examples "Role updateができる" do
   context "with valid params" do
     before do
-      put :update, { id: role.to_param, role: update_attributes }
-      role.reload
+      put :update, { id: only_view_role.to_param, role: update_attributes }
+      only_view_role.reload
     end
 
     it_behaves_like 'http code', 302
 
     context "updates the requested role" do
-      subject { role.name }
+      subject { only_view_role.name }
 
-      it { should eq update_attributes["name"] }
+      it { should eq update_attributes[:name] }
     end
 
     context "assigns the requested role as @role" do
       subject { assigns(:role) }
 
-      it { should eq role }
+      it { should eq only_view_role }
     end
 
     context "redirects to the role" do
       subject { response }
 
-      it { should redirect_to role }
+      it { should redirect_to only_view_role }
     end
   end
 
   context "with invalid params" do
     before do
       Role.any_instance.stub(:save).and_return(false)
-      put :update, { id: role.to_param, role: { "name" => "invalid value" } }
+      put :update, { id: only_view_role.to_param, role: { "name" => "invalid value" } }
     end
 
     it_behaves_like 'http code', 200
@@ -188,7 +187,7 @@ shared_examples "Role updateができる" do
     context "assigns the role as @role" do
       subject { assigns(:role) }
 
-      it { should eq role }
+      it { should eq only_view_role }
     end
 
     context "re-renders the 'edit' template" do
@@ -200,11 +199,12 @@ shared_examples "Role updateができる" do
 end
 
 shared_examples "Role updateができない" do
-  before { put :update, { id: role.to_param, role: update_attributes } }
+  before { put :update, { id: only_view_role.to_param, role: update_attributes } }
 
   it_behaves_like 'http code', 404
 end
 
+=begin
 #
 # destroy
 #

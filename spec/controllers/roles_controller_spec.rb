@@ -22,7 +22,7 @@ describe RolesController do
 
   let(:update_attributes) do
     {
-      "name" => "update_name"
+      name: "名前変更",
     }
   end
 
@@ -126,7 +126,6 @@ describe RolesController do
     end
   end
 
-=begin
   #
   # update
   #
@@ -147,6 +146,7 @@ describe RolesController do
     end
   end
 
+=begin
   #
   # destroy
   #
