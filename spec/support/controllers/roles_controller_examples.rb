@@ -49,24 +49,24 @@ shared_examples "Role newができない" do
   it_behaves_like 'http code', 404
 end
 
-=begin
 #
 # edit
 #
 shared_examples "Role editができる" do
-  before { get :edit, id: role.to_param }
+  before { get :edit, id: only_view_role.to_param }
   subject { assigns(:role) }
 
-  it { should eq role }
+  it { should eq only_view_role }
   it_behaves_like 'http code', 200
 end
 
 shared_examples "Role editができない" do
-  before { get :edit, id: role.to_param }
+  before { get :edit, id: only_view_role.to_param }
 
   it_behaves_like 'http code', 404
 end
 
+=begin
 #
 # create
 #

@@ -76,7 +76,6 @@ describe RolesController do
     end
   end
 
-=begin
   #
   # edit
   #
@@ -97,6 +96,7 @@ describe RolesController do
     end
   end
 
+=begin
   #
   # create
   #
