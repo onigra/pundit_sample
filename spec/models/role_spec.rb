@@ -156,6 +156,24 @@ describe Role do
         user_role.reload
       end
 
+      context "新しく作成したdomainが存在する" do
+        subject { user_role.ability }
+
+        it { should include foo_index.domain }
+      end
+
+      context "削除したdomainが存在しない" do
+        subject { user_role.ability }
+
+        it { should_not include 'user' }
+      end
+
+      context "user_roleに紐づくability_idがall_updateと一致している" do
+        subject { user_role.ability_id_to_a }
+
+        it { should eq all_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+      end
+
       it "物理削除したability_idが存在しない1" do
         expect(Role.exists?(old_ability_id[0])).to be_false
       end
@@ -164,15 +182,6 @@ describe Role do
         expect(Role.exists?(old_ability_id[1])).to be_false
       end
 
-      it "新しく作成したdomain名が紐づいている" do
-        expect(user_role.ability).to include('foo')
-      end
-
-      it "新しく作成したability名が紐づいていてる" do
-        expect(user_role.ability['foo']).to include(
-          {foo_index.ability => foo_index.id}, {foo_show.ability => foo_show.id}
-        )
-      end
     end
 
     context "更新なし" do
@@ -181,12 +190,10 @@ describe Role do
         user_role.reload
       end
 
-      it "更新されてない1" do
-        expect(user_role.ability_id_to_a).to include not_update["roles_abilities_attributes"][0]["ability_id"]
-      end
+      context "user_roleに紐づくability_idがnot_updateと一致している" do
+        subject { user_role.ability_id_to_a }
 
-      it "更新されてない2" do
-        expect(user_role.ability_id_to_a).to include not_update["roles_abilities_attributes"][1]["ability_id"]
+        it { should eq not_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
       end
     end
 
@@ -198,18 +205,22 @@ describe Role do
         user_role.reload
       end
 
-      it "物理削除したability_idが存在しない" do
-        expect(Role.exists?(old_ability_id[0])).to be_false
-      end
-
-      it "更新しないability_idが存在している" do
-        expect(user_role.ability_id_to_a).to include some_update["roles_abilities_attributes"][0]["ability_id"]
-      end
-
-      context "新しく作成したability名が紐づいている" do
+      context "新しく作成したdomainが存在する" do
         subject { user_role.ability }
 
-        it { should include 'foo' }
+        it { should include foo_index.domain }
+      end
+
+      context "user_roleに紐づくability_idがsome_updateと一致している" do
+        subject { user_role.ability_id_to_a }
+
+        it { should eq some_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+      end
+
+      context "物理削除したability_idが存在しない" do
+        subject { Role.exists?(old_ability_id[0]) }
+
+        it { should be_false }
       end
     end
 
