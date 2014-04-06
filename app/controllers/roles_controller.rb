@@ -33,7 +33,7 @@ class RolesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @role.update(role_params)
+      if @role.destroy_and_update(role_params)
         format.html { redirect_to @role, notice: 'Role was successfully updated.' }
         format.json { head :no_content }
       else

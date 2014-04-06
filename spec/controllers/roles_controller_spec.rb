@@ -11,18 +11,51 @@ describe RolesController do
 
   let(:valid_attributes) do
     {
-      name: "foo権限保持者",
-      roles_abilities_attributes: [
-        { ability_id: foo_index.to_param },
-        { ability_id: foo_show.to_param },
-        { ability_id: foo_create.to_param }
+      "name" => "foo権限保持者",
+      "roles_abilities_attributes" => [
+        { "ability_id" => foo_index.to_param },
+        { "ability_id" => foo_show.to_param },
+        { "ability_id" => foo_create.to_param }
       ]
     }
   end
 
-  let(:update_attributes) do
+  let(:update_name_only) do
     {
-      name: "名前変更",
+      "name" => "名前変更",
+    }
+  end
+
+  let(:all_update) do
+    {
+      "name" => "名前変更",
+      "roles_abilities_attributes" => [
+        { "ability_id" => foo_index.to_param },
+        { "ability_id" => foo_show.to_param }
+      ]
+    }
+  end
+
+  let(:some_update) do
+    {
+      "name" => "名前変更",
+      "roles_abilities_attributes" => [
+        { "ability_id" => only_view_role.roles_abilities[0].ability_id },
+        { "ability_id" => only_view_role.roles_abilities[1].ability_id },
+        { "ability_id" => only_view_role.roles_abilities[2].ability_id },
+        { "ability_id" => foo_index.to_param }
+      ]
+    }
+  end
+
+  let(:not_update) do
+    {
+      "roles_abilities_attributes" => [
+        { "ability_id" => only_view_role.roles_abilities[0].ability_id },
+        { "ability_id" => only_view_role.roles_abilities[1].ability_id },
+        { "ability_id" => only_view_role.roles_abilities[2].ability_id },
+        { "ability_id" => only_view_role.roles_abilities[3].ability_id },
+      ]
     }
   end
 

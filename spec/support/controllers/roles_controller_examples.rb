@@ -89,7 +89,7 @@ shared_examples "Role createができる" do
     end
 
     context "inside @role" do
-      it { expect(assigns(:role).name).to eq valid_attributes[:name] }
+      it { expect(assigns(:role).name).to eq valid_attributes["name"] }
 
       context 'ability' do
         subject { assigns(:role).ability }
@@ -150,29 +150,130 @@ end
 #
 shared_examples "Role updateができる" do
   context "with valid params" do
-    before do
-      put :update, { id: only_view_role.to_param, role: update_attributes }
-      only_view_role.reload
+    context "name only" do
+      before do
+        put :update, { id: only_view_role.to_param, role: update_name_only }
+        only_view_role.reload
+      end
+
+      it_behaves_like 'http code', 302
+
+      context "updates the requested role" do
+        subject { only_view_role.name }
+
+        it { should eq update_name_only["name"] }
+      end
+
+      context "assigns the requested role as @role" do
+        subject { assigns(:role) }
+
+        it { should eq only_view_role }
+      end
+
+      context "redirects to the role" do
+        subject { response }
+
+        it { should redirect_to only_view_role }
+      end
     end
 
-    it_behaves_like 'http code', 302
+    context "all update" do
+      before do
+        put :update, { id: only_view_role.to_param, role: all_update }
+        only_view_role.reload
+      end
 
-    context "updates the requested role" do
-      subject { only_view_role.name }
+      it_behaves_like 'http code', 302
 
-      it { should eq update_attributes[:name] }
+      context "updates the requested role" do
+        subject { only_view_role.name }
+
+        it { should eq all_update["name"] }
+
+        context "update ability id" do
+          subject { only_view_role.ability_id_to_a }
+
+          it { should eq all_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+        end
+      end
+
+      context "assigns the requested role as @role" do
+        subject { assigns(:role) }
+
+        it { should eq only_view_role }
+      end
+
+      context "redirects to the role" do
+        subject { response }
+
+        it { should redirect_to only_view_role }
+      end
     end
 
-    context "assigns the requested role as @role" do
-      subject { assigns(:role) }
+    context "some update" do
+      before do
+        put :update, { id: only_view_role.to_param, role: some_update }
+        only_view_role.reload
+      end
 
-      it { should eq only_view_role }
+      it_behaves_like 'http code', 302
+
+      context "updates the requested role" do
+        subject { only_view_role.name }
+
+        it { should eq some_update["name"] }
+
+        context "update ability id" do
+          subject { only_view_role.ability_id_to_a }
+
+          it { should eq some_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+        end
+      end
+
+      context "assigns the requested role as @role" do
+        subject { assigns(:role) }
+
+        it { should eq only_view_role }
+      end
+
+      context "redirects to the role" do
+        subject { response }
+
+        it { should redirect_to only_view_role }
+      end
     end
 
-    context "redirects to the role" do
-      subject { response }
+    context "not update" do
+      before do
+        put :update, { id: only_view_role.to_param, role: not_update }
+        only_view_role.reload
+      end
 
-      it { should redirect_to only_view_role }
+      it_behaves_like 'http code', 302
+
+      context "updates the requested role" do
+        subject { only_view_role.name }
+
+        it { should eq "参照権限" }
+
+        context "update ability id" do
+          subject { only_view_role.ability_id_to_a }
+
+          it { should eq not_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+        end
+      end
+
+      context "assigns the requested role as @role" do
+        subject { assigns(:role) }
+
+        it { should eq only_view_role }
+      end
+
+      context "redirects to the role" do
+        subject { response }
+
+        it { should redirect_to only_view_role }
+      end
     end
   end
 
@@ -199,7 +300,7 @@ shared_examples "Role updateができる" do
 end
 
 shared_examples "Role updateができない" do
-  before { put :update, { id: only_view_role.to_param, role: update_attributes } }
+  before { put :update, { id: only_view_role.to_param, role: update_name_only } }
 
   it_behaves_like 'http code', 404
 end
