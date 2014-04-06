@@ -28,7 +28,7 @@ class Role < ActiveRecord::Base
   #
   def destroy_and_update(params)
     begin
-      ActiveRecord::Base.transaction do
+      transaction do
         destroy_old_abilities(params) if params_has_ability_id?(params)
         raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id { params })
         reload
