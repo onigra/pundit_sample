@@ -1,5 +1,7 @@
 h1 Home
 
 ul
-  li == link_to 'Users', users_path 
-  li == link_to 'Roles', roles_path 
+  - if policy(User.new).index?
+    li == link_to 'Users', users_path
+  - if policy(Role.new).index?
+    li == link_to 'Roles', roles_path
