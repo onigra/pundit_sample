@@ -1,15 +1,43 @@
 require 'spec_helper'
 
-# Specs in this file have access to a helper object that includes
-# the HomeHelper. For example:
-#
-# describe HomeHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 describe HomeHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe ".user_index?" do
+    context '管理者' do
+      include_context "管理者"
+      subject { user_index?(user) }
+      it { should be_true }
+    end
+
+    context '権限保持者' do
+      include_context "User"
+      subject { user_index?(user) }
+      it { should be_true }
+    end
+
+    context '権限非保持者' do
+      include_context "Role"
+      subject { user_index?(user) }
+      it { should be_false }
+    end
+  end
+
+  describe ".role_index?" do
+    context '管理者' do
+      include_context "管理者"
+      subject { role_index?(user) }
+      it { should be_true }
+    end
+
+    context '権限保持者' do
+      include_context "Role"
+      subject { role_index?(user) }
+      it { should be_true }
+    end
+
+    context '権限非保持者' do
+      include_context "User"
+      subject { role_index?(user) }
+      it { should be_false }
+    end
+  end
 end
