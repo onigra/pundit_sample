@@ -1,0 +1,31 @@
+h1 Listing users
+
+table
+  thead
+    tr
+      th Name
+      th Role Id
+      th Role Name
+      th Email
+      th
+      th
+      th
+
+  tbody
+    - @users.each do |user|
+      tr
+        td #{user.name}
+        td #{user.role_id}
+        td #{user.role.name}
+        td #{user.email}
+        - if user_show?
+          td == link_to 'Show', user
+        - if user_edit?
+          td == link_to 'Edit', edit_user_path(user)
+        - if user_destroy?
+          td == link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
+
+br
+
+- if user_create?
+  == link_to 'New User', new_user_path
