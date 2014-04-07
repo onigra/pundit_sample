@@ -1,0 +1,22 @@
+p#notice = notice
+
+p
+  strong Name:  
+  ' #{@user.name}
+
+p
+  strong Role Id:  
+  ' #{@user.role_id}
+
+p
+  strong Role Name:  
+  ' #{@user.role.name}
+
+p
+  strong Email:  
+  ' #{@user.email}
+
+- if user_edit?
+  = link_to 'Edit', edit_user_path(@user)
+'  |
+= link_to 'Back', users_path
