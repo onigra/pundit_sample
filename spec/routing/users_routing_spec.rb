@@ -20,7 +20,7 @@ describe UsersController do
     end
 
     it "routes to #create" do
-      expect(post "/users").to route_to("devise/registrations#create")
+      expect(post "/users").to route_to("users#create")
     end
 
     it "routes to #update" do
