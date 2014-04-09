@@ -14,4 +14,16 @@ class User < ActiveRecord::Base
   def admin?
     ability.include? 'admin'
   end
+
+  def update_without_current_password(params, *options)
+    params.delete(:current_password)
+
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation) if params[:password_confirmation].blank?
+    end
+
+    clean_up_passwords
+    update(params, *options)
+  end
 end
