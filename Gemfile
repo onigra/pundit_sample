@@ -36,6 +36,7 @@ gem 'devise'
 gem 'pundit'
 gem 'seed-fu', github: 'mbleigh/seed-fu'
 gem 'slim-rails'
+gem 'devise-better_routes'
 
 group :test, :development do
   gem 'rspec-rails'
