@@ -14,4 +14,8 @@ class User < ActiveRecord::Base
   def admin?
     ability.include? 'admin'
   end
+
+  scope :except_admin, -> {
+    joins(:role).where.not(roles: { name: "administrator"} )
+  }
 end
