@@ -40,7 +40,7 @@ gem 'devise-better_routes'
 
 group :test, :development do
   gem 'rspec-rails'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '2.5'
   gem 'rake_shared_context'
   gem 'accept_values_for'
 
@@ -48,6 +48,7 @@ group :test, :development do
   gem 'fabrication'
   gem 'forgery'
 
+  gem 'spring-commands-rspec'
   gem 'guard-rspec'
   gem 'guard-livereload'
   gem 'growl'
