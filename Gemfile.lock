@@ -279,6 +279,7 @@ DEPENDENCIES
   guard-rspec
   jbuilder (~> 1.2)
   jquery-rails
+  minitest
   mysql2
   pry-byebug
   pry-coolline
