@@ -8,6 +8,8 @@ html
   body
     - if request.path_info != new_user_session_path
       = link_to "logout", destroy_user_session_path
+      |  
+      = link_to "home", root_path
     - if notice
       p.alert.alert-notice= notice
     - if alert
