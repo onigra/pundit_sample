@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title PunditSample
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  body
+    - if request.path_info != new_user_session_path
+      = link_to "logout", destroy_user_session_path
+    - if notice
+      p.alert.alert-notice= notice
+    - if alert
+      p.alert.alert-error= alert
+    = yield
+
