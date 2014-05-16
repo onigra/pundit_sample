@@ -1,7 +1,11 @@
 class RolePolicy < ApplicationPolicy
   class Scope < Struct.new(:user, :scope)
     def resolve
-      scope
+      if user.admin?
+        scope.all
+      else
+        scope.except_admin
+      end
     end
   end
 

@@ -81,6 +81,10 @@ class Role < ActiveRecord::Base
     ability_id_to_a - params_to_array(params)
   end
 
+  scope :except_admin, -> {
+    select(:id, :name).joins(:roles_abilities).joins(:abilities).where.not(abilities: { domain: "admin" }).uniq
+  }
+
   private
 
     ###

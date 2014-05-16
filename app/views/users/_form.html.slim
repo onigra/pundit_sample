@@ -15,7 +15,7 @@
   .field
     = f.label :role_id
     br
-    = f.number_field :role_id
+    = f.collection_select :role_id, UserPolicy::Scope.new(current_user, Role).resolve, :id, :name
 
   .field
     = f.label :email
