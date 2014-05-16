@@ -1,0 +1,20 @@
+p#notice= notice
+p
+  strong Name:
+  = @role.name
+
+p
+  strong Ability:
+  - @role.ability.each do |key, val|
+    br
+    = "#{key}:"
+    br
+    - val.each do |item|
+      - item.each do |k, v|
+        = "#{k} "
+      
+
+
+= link_to 'Edit', edit_role_path(@role)
+'  |
+= link_to 'Back', roles_path

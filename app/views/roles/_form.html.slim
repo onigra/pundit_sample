@@ -1,0 +1,25 @@
+= form_for(@role) do |f|
+  - if @role.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@role.errors.count, "error")
+        | prohibited this role from being saved:
+      ul
+        - @role.errors.full_messages.each do |msg|
+          li= msg
+  .field
+    = f.label :name
+    br
+      = f.text_field :name
+
+  .field
+    = f.label :ability
+    br
+    - Ability.all.each do |i|
+      = "#{i.domain} #{i.ability}"
+      = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id 
+      br
+
+  .actions
+    = f.submit
+
