@@ -18,7 +18,7 @@ class RolesController < ApplicationController
   end
 
   def create
-    @role = Role.new(role_params)
+    @role = Role.new(role_params.merge(ability_params))
 
     respond_to do |format|
       if @role.save
@@ -33,7 +33,7 @@ class RolesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @role.destroy_and_update(role_params)
+      if @role.destroy_and_update(role_params.merge(ability_params))
         format.html { redirect_to @role, notice: 'Role was successfully updated.' }
         format.json { head :no_content }
       else
@@ -57,12 +57,11 @@ class RolesController < ApplicationController
     end
 
     def role_params
-      params.require(:role).permit(
-        :name,
-        roles_abilities_attributes: [
-          :ability_id
-        ]
-      )
+      params.require(:role).permit(:name)
+    end
+
+    def ability_params
+      params.require(:ability).permit(roles_abilities_attributes: [:ability_id])
     end
 
     def pundit_auth
