@@ -17,9 +17,11 @@
     br
     - Ability.all.each do |i|
       = "#{i.domain} #{i.ability}"
-      = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id 
+      - if @role.roles_abilities.map(&:ability_id).include?(i.id)
+        = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id, i.id
+      - else
+        = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id
       br
 
   .actions
     = f.submit
-
