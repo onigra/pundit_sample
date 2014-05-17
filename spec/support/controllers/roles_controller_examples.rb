@@ -71,7 +71,7 @@ end
 #
 shared_examples "Role createができる" do
   context "with valid params" do
-    before { post :create, { role: valid_attributes } }
+    before { post :create, { role: new_role_name_attr, ability: new_role_ability_attr } }
 
     it_behaves_like 'http code', 302
 
@@ -89,7 +89,7 @@ shared_examples "Role createができる" do
     end
 
     context "inside @role" do
-      it { expect(assigns(:role).name).to eq valid_attributes["name"] }
+      it { expect(assigns(:role).name).to eq new_role_name_attr["name"] }
 
       context 'ability' do
         subject { assigns(:role).ability }
@@ -120,7 +120,10 @@ shared_examples "Role createができる" do
   context "with invalid params" do
     before do
       Role.any_instance.stub(:save).and_return(false)
-      post :create, { role: { "name" => "invalid value" } }
+      post :create, {
+        role: { "name" => "invalid value" },
+        ability: { "roles_abilities_attributes" => [{ "ability_id" => "1" }] }
+      }
     end
 
     it_behaves_like 'http code', 200
@@ -140,7 +143,7 @@ shared_examples "Role createができる" do
 end
 
 shared_examples "Role createができない" do
-  before { post :create, { role: valid_attributes } }
+  before { post :create, { role: new_role_name_attr, ability: new_role_ability_attr } }
 
   it_behaves_like 'http code', 404
 end
@@ -152,7 +155,7 @@ shared_examples "Role updateができる" do
   context "with valid params" do
     context "name only" do
       before do
-        put :update, { id: only_view_role.to_param, role: update_name_only }
+        put :update, { id: only_view_role.to_param, role: update_name_only, ability: not_update_ability }
         only_view_role.reload
       end
 
@@ -179,7 +182,7 @@ shared_examples "Role updateができる" do
 
     context "all update" do
       before do
-        put :update, { id: only_view_role.to_param, role: all_update }
+        put :update, { id: only_view_role.to_param, role: all_update_name, ability: all_update_ability }
         only_view_role.reload
       end
 
@@ -188,12 +191,12 @@ shared_examples "Role updateができる" do
       context "updates the requested role" do
         subject { only_view_role.name }
 
-        it { should eq all_update["name"] }
+        it { should eq all_update_name["name"] }
 
         context "update ability id" do
           subject { only_view_role.ability_id_to_a }
 
-          it { should eq all_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+          it { should eq all_update_ability["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
         end
       end
 
@@ -212,7 +215,7 @@ shared_examples "Role updateができる" do
 
     context "some update" do
       before do
-        put :update, { id: only_view_role.to_param, role: some_update }
+        put :update, { id: only_view_role.to_param, role: update_name_only, ability: some_update_ability }
         only_view_role.reload
       end
 
@@ -221,12 +224,12 @@ shared_examples "Role updateができる" do
       context "updates the requested role" do
         subject { only_view_role.name }
 
-        it { should eq some_update["name"] }
+        it { should eq update_name_only["name"] }
 
         context "update ability id" do
           subject { only_view_role.ability_id_to_a }
 
-          it { should eq some_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+          it { should eq some_update_ability["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
         end
       end
 
@@ -245,7 +248,7 @@ shared_examples "Role updateができる" do
 
     context "not update" do
       before do
-        put :update, { id: only_view_role.to_param, role: not_update }
+        put :update, { id: only_view_role.to_param, role: { "name" => only_view_role.name }, ability: not_update_ability }
         only_view_role.reload
       end
 
@@ -259,7 +262,7 @@ shared_examples "Role updateができる" do
         context "update ability id" do
           subject { only_view_role.ability_id_to_a }
 
-          it { should eq not_update["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
+          it { should eq not_update_ability["roles_abilities_attributes"].map {|i| i['ability_id'].to_i } }
         end
       end
 
@@ -280,7 +283,11 @@ shared_examples "Role updateができる" do
   context "with invalid params" do
     before do
       Role.any_instance.stub(:save).and_return(false)
-      put :update, { id: only_view_role.to_param, role: { "name" => "invalid value" } }
+      put :update, {
+        id: only_view_role.to_param,
+        role: { "name" => "invalid value" },
+        ability: { "roles_abilities_attributes" => [{ "ability_id" => "1" }] }
+      }
     end
 
     it_behaves_like 'http code', 200
@@ -300,7 +307,7 @@ shared_examples "Role updateができる" do
 end
 
 shared_examples "Role updateができない" do
-  before { put :update, { id: only_view_role.to_param, role: update_name_only } }
+  before { put :update, { id: only_view_role.to_param, role: update_name_only, ability: some_update_ability } }
 
   it_behaves_like 'http code', 404
 end
