@@ -81,18 +81,18 @@ class Role < ActiveRecord::Base
 
   private
 
-    ###
-    # パラメータで渡されたability_idを配列で返す
-    #
-    def params_to_array(params)
-      params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
-    end
+  ###
+  # パラメータで渡されたability_idを配列で返す
+  #
+  def params_to_array(params)
+    params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
+  end
 
-    ###
-    # パラメータにroles_abilities_attributesがあるかチェック
-    # roles_abilities_attributesに空配列とかはいってきたら困るため
-    #
-    def params_has_ability_id?(params)
-      params.include?("roles_abilities_attributes") && params["roles_abilities_attributes"].present?
-    end
+  ###
+  # パラメータにroles_abilities_attributesがあるかチェック
+  # roles_abilities_attributesに空配列とかはいってきたら困るため
+  #
+  def params_has_ability_id?(params)
+    params.include?("roles_abilities_attributes") && params["roles_abilities_attributes"].present?
+  end
 end
