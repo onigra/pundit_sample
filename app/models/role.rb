@@ -4,6 +4,8 @@ class Role < ActiveRecord::Base
   has_many :abilities, through: :roles_abilities
   accepts_nested_attributes_for :roles_abilities, :update_only => true
 
+  validates_presence_of :name
+
   def ability
     Ability.ability_hash_with_id self.roles_abilities.map(&:ability_id)
   end

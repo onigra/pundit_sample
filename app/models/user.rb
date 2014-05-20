@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :role
 
+  validates_presence_of :name, :email
+  validates_confirmation_of :password
+
   def ability
     Ability.ability_hash self.role.roles_abilities.map(&:ability_id)
   end

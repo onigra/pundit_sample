@@ -59,7 +59,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:name, :role_id, :email, :password)
+    params.require(:user).permit(:name, :role_id, :email, :password, :password_confirmation)
   end
 
   def pundit_auth
