@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
-    @users = policy_scope(User)
+    @users = policy_scope User
   end
 
   def show
@@ -45,6 +45,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
+
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }
@@ -52,15 +53,16 @@ class UsersController < ApplicationController
   end
 
   private
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    def user_params
-      params.require(:user).permit(:name, :role_id, :email, :password)
-    end
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    def pundit_auth
-      authorize User.new
-    end
+  def user_params
+    params.require(:user).permit(:name, :role_id, :email, :password)
+  end
+
+  def pundit_auth
+    authorize User.new
+  end
 end
