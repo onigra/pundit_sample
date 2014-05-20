@@ -3,12 +3,12 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   belongs_to :role
 
-  def ability(h = {})
-    role.roles_abilities.group_by {|i| i.ability.domain }.each do |key, vals|
-      h[key] = vals.map {|val| val.ability.ability }
+  def ability(result = {})
+    Ability.where(id: self.role.roles_abilities.map(&:ability_id)).group_by(&:domain).each do |domain, abilities|
+      result[domain] = abilities.map { |item| item.ability }
     end
 
-    return h
+    result
   end
 
   def admin?
