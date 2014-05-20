@@ -4,12 +4,8 @@ class Role < ActiveRecord::Base
   has_many :abilities, through: :roles_abilities
   accepts_nested_attributes_for :roles_abilities, :update_only => true
 
-  def ability(result = {})
-    Ability.where(id: self.roles_abilities.map(&:ability_id)).group_by(&:domain).each do |domain, abilities|
-      result[domain] = abilities.map { |item| { item.ability => item.id } }
-    end
-
-    result
+  def ability
+    Ability.ability_hash_with_id self.roles_abilities.map(&:ability_id)
   end
 
   def ability_id_to_a
