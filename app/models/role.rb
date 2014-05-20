@@ -27,18 +27,16 @@ class Role < ActiveRecord::Base
   #   * 既にあるものは何もしない
   #
   def destroy_and_update(params)
-    begin
-      transaction do
-        destroy_old_abilities(params) if params_has_ability_id?(params)
-        raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id { params })
-        reload
-        true
-      end
-    rescue => e
-      logger.error e.message
-      e.backtrace.each { |line| logger.error line }
-      false
+    ActiveRecord::Base.transaction do
+      destroy_old_abilities(params) if params_has_ability_id?(params)
+      raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id { params })
+      reload
+      true
     end
+  rescue => e
+    logger.error e.message
+    e.backtrace.each { |line| logger.error line }
+    false
   end
 
   ###
