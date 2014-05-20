@@ -13,8 +13,7 @@ p
       - item.each do |k, v|
         = "#{k} "
       
-
-
-= link_to 'Edit', edit_role_path(@role)
+- if role_edit?
+  = link_to 'Edit', edit_role_path(@role)
 '  |
 = link_to 'Back', roles_path
