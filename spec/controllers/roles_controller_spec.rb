@@ -9,14 +9,9 @@ describe RolesController do
   let(:foo_update) { Fabricate(:foo_update) }
   let(:foo_destroy) { Fabricate(:foo_destroy) }
 
-  let(:new_role_name_attr) do
+  let(:valid_attributes) do
     {
       "name" => "foo権限保持者",
-    }
-  end
-
-  let(:new_role_ability_attr) do
-    {
       "roles_abilities_attributes" => [
         { "ability_id" => foo_index.to_param },
         { "ability_id" => foo_show.to_param },
@@ -31,14 +26,9 @@ describe RolesController do
     }
   end
 
-  let(:all_update_name) do
+  let(:all_update) do
     {
       "name" => "名前変更",
-    }
-  end
-
-  let(:all_update_ability) do
-    {
       "roles_abilities_attributes" => [
         { "ability_id" => foo_index.to_param },
         { "ability_id" => foo_show.to_param }
@@ -46,8 +36,9 @@ describe RolesController do
     }
   end
 
-  let(:some_update_ability) do
+  let(:some_update) do
     {
+      "name" => "名前変更",
       "roles_abilities_attributes" => [
         { "ability_id" => only_view_role.roles_abilities[0].ability_id },
         { "ability_id" => only_view_role.roles_abilities[1].ability_id },
@@ -57,7 +48,7 @@ describe RolesController do
     }
   end
 
-  let(:not_update_ability) do
+  let(:not_update) do
     {
       "roles_abilities_attributes" => [
         { "ability_id" => only_view_role.roles_abilities[0].ability_id },
