@@ -13,15 +13,16 @@
       = f.text_field :name
 
   .field
-    = f.label :ability
-    br
-    - Ability.except_admin.each do |i|
-      = "#{i.domain} #{i.ability}"
-      - if @role.roles_abilities.map(&:ability_id).include?(i.id)
-        = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id, i.id
-      - else
-        = check_box_tag "ability[roles_abilities_attributes][][ability_id]", i.id
+    = f.fields_for :roles_abilities do |ra|
+      = ra.label :ability
       br
+        - Ability.except_admin.each do |i|
+          = "#{i.domain} #{i.ability}"
+          - if @role.roles_abilities.map(&:ability_id).include?(i.id)
+            = ra.check_box :ability_id, { name: 'role[roles_abilities_attributes][][ability_id]' }, i.id, i.id
+          - else
+            = ra.check_box :ability_id, { name: 'role[roles_abilities_attributes][][ability_id]' }, i.id, nil
+          br
 
   .actions
     = f.submit
