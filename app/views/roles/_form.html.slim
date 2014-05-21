@@ -18,10 +18,7 @@
       br
         - Ability.except_admin.each do |i|
           = "#{i.domain} #{i.ability}"
-          - if @role.roles_abilities.map(&:ability_id).include?(i.id)
-            = ra.check_box :ability_id, { name: 'role[roles_abilities_attributes][][ability_id]' }, i.id, i.id
-          - else
-            = ra.check_box :ability_id, { name: 'role[roles_abilities_attributes][][ability_id]' }, i.id, nil
+          = ra.check_box :ability_id, { name: 'role[roles_abilities_attributes][][ability_id]' }, i.id, @role.roles_abilities.map(&:ability_id).include?(i.id) ? i.id : nil
           br
 
   .actions
