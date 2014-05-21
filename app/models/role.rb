@@ -6,6 +6,13 @@ class Role < ActiveRecord::Base
 
   validates_presence_of :name
 
+  # role新規作成時にabilityのチェックが0件だったらエラー
+  validates_each :ability do |record, attr, value|
+    if value["roles_abilities_attributes"].blank?
+      record.errors.add attr, '権限は1件以上選択してください'
+    end
+  end
+
   def ability
     Ability.ability_hash_with_id self.roles_abilities.map(&:ability_id)
   end
