@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UsersController do
-  let(:has_only_view_authority) { Fabricate(:has_only_view_authority) }
+  let(:has_only_view_authority) { FG.create(:has_only_view_authority) }
 
   let(:valid_attributes) do
     {

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe User do
-  let(:administrator) { Fabricate(:administrator) }
-  let(:has_user_authority) { Fabricate(:has_user_authority) }
-  let(:has_role_authority) { Fabricate(:has_role_authority) }
+  let(:administrator) { FG.create(:administrator) }
+  let(:has_user_authority) { FG.create(:has_user_authority) }
+  let(:has_role_authority) { FG.create(:has_role_authority) }
 
   describe 'relationship' do
     it { should belong_to(:role) }

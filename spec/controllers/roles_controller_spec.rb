@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe RolesController do
-  let(:only_view_role) { Fabricate(:only_view_role) }
+  let(:only_view_role) { FG.create(:only_view_role) }
 
-  let(:foo_index) { Fabricate(:foo_index) }
-  let(:foo_show) { Fabricate(:foo_show) }
-  let(:foo_create) { Fabricate(:foo_create) }
-  let(:foo_update) { Fabricate(:foo_update) }
-  let(:foo_destroy) { Fabricate(:foo_destroy) }
+  let(:foo_index) { FG.create(:foo_index) }
+  let(:foo_show) { FG.create(:foo_show) }
+  let(:foo_create) { FG.create(:foo_create) }
+  let(:foo_update) { FG.create(:foo_update) }
+  let(:foo_destroy) { FG.create(:foo_destroy) }
 
   let(:valid_attributes) do
     {
