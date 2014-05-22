@@ -93,6 +93,11 @@ GEM
     eventmachine (1.0.3)
     execjs (2.0.2)
     fabrication (2.11.2)
+    factory_girl (4.4.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.4.1)
+      factory_girl (~> 4.4.0)
+      railties (>= 3.0.0)
     ffi (1.9.3)
     forgery (0.6.0)
     formatador (0.2.4)
@@ -273,6 +278,7 @@ DEPENDENCIES
   devise
   devise-better_routes
   fabrication
+  factory_girl_rails
   forgery
   growl
   guard-livereload

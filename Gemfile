@@ -47,6 +47,7 @@ group :test, :development do
 
   gem 'database_rewinder'
   gem 'fabrication'
+  gem 'factory_girl_rails'
   gem 'forgery'
 
   gem 'spring-commands-rspec'
