@@ -37,7 +37,7 @@ class Role < ActiveRecord::Base
     ActiveRecord::Base.transaction do
       destroy_old_abilities(params)
       self.attributes = push_current_roles_abilities_id(params)
-      raise ActiveRecord::Rollback unless self.save(validate: false)
+      raise ActiveRecord::Rollback unless self.save
       reload
       true
     end
@@ -97,6 +97,10 @@ class Role < ActiveRecord::Base
   # パラメータで渡されたability_idを配列で返す
   #
   def params_to_array(params)
+    raise ArgumentError unless params.include?("roles_abilities_attributes")
     params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
+  rescue ArgumentError
+    errors.add "Ability", "権限は1件以上選択してください"
+    raise ActiveRecord::Rollback
   end
 end
