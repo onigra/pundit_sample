@@ -20,12 +20,6 @@ describe RolesController do
     }
   end
 
-  let(:update_name_only) do
-    {
-      "name" => "名前変更",
-    }
-  end
-
   let(:all_update) do
     {
       "name" => "名前変更",
