@@ -6,7 +6,9 @@ class Role < ActiveRecord::Base
 
   validates_presence_of :name
 
+  #
   # role新規作成時にabilityのチェックが0件だったらエラー
+  #
   validates_each :ability do |record, attr, value|
     if value["roles_abilities_attributes"].blank?
       record.errors.add attr, '権限は1件以上選択してください'
@@ -18,14 +20,14 @@ class Role < ActiveRecord::Base
   end
 
   def ability_id_to_a
-    roles_abilities.map { |i| i.ability_id }
+    roles_abilities.map(&:ability_id)
   end
 
   def index_by_ability_id
     roles_abilities.index_by(&:ability_id)
   end
 
-  ###
+  #
   # roleに紐づくability_idを更新する際、
   #   * 不要になるroles_abilities.ability_idが存在したら物理削除
   #   * 新しく作成するものは新規作成
@@ -33,8 +35,9 @@ class Role < ActiveRecord::Base
   #
   def destroy_and_update(params)
     ActiveRecord::Base.transaction do
-      destroy_old_abilities(params) if params_has_ability_id?(params)
-      raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id { params })
+      destroy_old_abilities(params)
+      self.attributes = push_current_roles_abilities_id(params)
+      raise ActiveRecord::Rollback unless self.save(validate: false)
       reload
       true
     end
@@ -44,7 +47,7 @@ class Role < ActiveRecord::Base
     false
   end
 
-  ###
+  #
   # paramsのability_idに現在のability_idが入っていた場合、
   # hashにroles_abilities.idを追加する
   #
@@ -52,17 +55,17 @@ class Role < ActiveRecord::Base
   # 既に存在するability_idが入ってるレコードには何もしたくない。
   # そのため、updateを呼ぶ際にroles_abilities.idを追加する。
   #
-  def push_current_roles_abilities_id
-    if yield.include?("roles_abilities_attributes")
-      yield["roles_abilities_attributes"].each do |item|
-        item["id"] = index_by_ability_id[item["ability_id"].to_i].id.to_s if index_by_ability_id.include?(item["ability_id"].to_i)
+  def push_current_roles_abilities_id(params)
+    params["roles_abilities_attributes"].each do |item|
+      if index_by_ability_id.include? item["ability_id"].to_i
+        item["id"] = index_by_ability_id[item["ability_id"].to_i].id.to_s
       end
     end
 
-    yield
+    params
   end
 
-  ###
+  #
   # 削除するability_idがインスタンスのroles_abilities.ability_idと
   # 一致していたら物理削除
   #
@@ -74,7 +77,7 @@ class Role < ActiveRecord::Base
     end
   end
 
-  ###
+  #
   # role更新時に削除するability_idを取得して配列で返す
   #
   # privateメソッドでもいいような気がするが、
@@ -90,18 +93,10 @@ class Role < ActiveRecord::Base
 
   private
 
-  ###
+  #
   # パラメータで渡されたability_idを配列で返す
   #
   def params_to_array(params)
     params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
-  end
-
-  ###
-  # パラメータにroles_abilities_attributesがあるかチェック
-  # roles_abilities_attributesに空配列とかはいってきたら困るため
-  #
-  def params_has_ability_id?(params)
-    params.include?("roles_abilities_attributes") && params["roles_abilities_attributes"].present?
   end
 end

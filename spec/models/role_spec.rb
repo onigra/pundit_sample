@@ -3,14 +3,14 @@ require 'spec_helper'
 describe Role do
 
   # role
-  let(:user_role) { Fabricate(:user_role) }
+  let(:user_role) { FG.create(:user_role) }
 
   # ability
-  let(:foo_index) { Fabricate(:foo_index) }
-  let(:foo_show) { Fabricate(:foo_show) }
-  let(:foo_create) { Fabricate(:foo_create) }
-  let(:foo_udpate) { Fabricate(:foo_udpate) }
-  let(:foo_destroy) { Fabricate(:foo_destroy) }
+  let(:foo_index)   { FG.create(:foo_index) }
+  let(:foo_show)    { FG.create(:foo_show) }
+  let(:foo_create)  { FG.create(:foo_create) }
+  let(:foo_udpate)  { FG.create(:foo_udpate) }
+  let(:foo_destroy) { FG.create(:foo_destroy) }
 
   let(:all_update) do
     {
@@ -53,12 +53,6 @@ describe Role do
     }
   end
 
-  let(:roles_abilities_attributes_is_empty) do
-    {
-      "roles_abilities_attributes" => []
-    }
-  end
-
   describe 'relationship' do
     it { should have_one(:user) }
     it { should have_many(:roles_abilities).dependent(:destroy) }
@@ -95,7 +89,7 @@ describe Role do
   describe "#push_current_roles_abilities_id" do
     context "全更新 全ての要素にroles_abilities.idが含まれていない" do
       subject do
-        user_role.push_current_roles_abilities_id { all_update }["roles_abilities_attributes"]
+        user_role.push_current_roles_abilities_id(all_update)["roles_abilities_attributes"]
       end
 
       its([0]) { should_not include "id" }
@@ -104,7 +98,7 @@ describe Role do
 
     context "一部更新 roles_abilities.idが含まれている要素がある" do
       subject do
-        user_role.push_current_roles_abilities_id { some_update }["roles_abilities_attributes"]
+        user_role.push_current_roles_abilities_id(some_update)["roles_abilities_attributes"]
       end
 
       its([0]) { should include "id" }
@@ -116,16 +110,11 @@ describe Role do
 
     context "更新なし 全ての要素にroles_abilities.idが含まれている" do
       subject do
-        user_role.push_current_roles_abilities_id { not_update }["roles_abilities_attributes"]
+        user_role.push_current_roles_abilities_id(not_update)["roles_abilities_attributes"]
       end
 
       its([0]) { should include "id" }
       its([1]) { should include "id" }
-    end
-
-    context "roles_abilities_attributes無し" do
-      subject { user_role.push_current_roles_abilities_id { not_include_roles_abilities_attributes } }
-      it { should eq not_include_roles_abilities_attributes }
     end
   end
 
@@ -140,22 +129,9 @@ describe Role do
         expect(user_role.ability).to include('user')
       end
 
-      it "名前は変わっている" do
-        expect(user_role.name).to eq not_include_roles_abilities_attributes["name"]
+      it "名前も変わらない" do
+        expect(user_role.name).to eq "User権限"
       end
-    end
-
-    context "roles_abilities_attributesに空配列が入っている" do
-      before do
-        user_role.destroy_and_update(roles_abilities_attributes_is_empty)
-        user_role.reload
-      end
-
-      it "abilityは更新されない" do
-        expect(user_role.ability).to include('user')
-      end
-
-      it { expect(user_role.name).to eq "User権限" }
     end
 
     context "全更新" do
@@ -229,23 +205,17 @@ describe Role do
 
     context "ロールバック" do
       context "古いレコードの削除が失敗した場合" do
-        before do
+        it "return false" do
           Role.any_instance.stub(:destroy_old_abilities).and_raise
-          user_role.destroy_and_update(all_update)
-          user_role.reload
+          expect(user_role.destroy_and_update all_update).to be_false
         end
-
-        it { expect(user_role.ability).to include('user') }
       end
 
       context "新しいレコードの作成が失敗した場合" do
-        before do
-          Role.any_instance.stub(:update).and_return(false)
-          user_role.destroy_and_update(all_update)
-          user_role.reload
+        it "return false" do
+          Role.any_instance.stub(:save).and_return(false)
+          expect(user_role.destroy_and_update all_update).to be_false
         end
-
-        it { expect(user_role.ability).to include('user') }
       end
     end
   end
