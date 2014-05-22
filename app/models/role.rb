@@ -10,7 +10,7 @@ class Role < ActiveRecord::Base
   # role新規作成時にabilityのチェックが0件だったらエラー
   #
   validates_each :ability do |record, attr, value|
-    if value["roles_abilities_attributes"].blank?
+    if record.roles_abilities.blank?
       record.errors.add attr, '権限は1件以上選択してください'
     end
   end
