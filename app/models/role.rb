@@ -36,8 +36,7 @@ class Role < ActiveRecord::Base
   def destroy_and_update(params)
     ActiveRecord::Base.transaction do
       destroy_old_abilities(params)
-      self.attributes = push_current_roles_abilities_id(params)
-      raise ActiveRecord::Rollback unless self.save
+      raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id params)
       reload
       true
     end
@@ -79,6 +78,8 @@ class Role < ActiveRecord::Base
 
   #
   # role更新時に削除するability_idを取得して配列で返す
+  # [現在のability_id] - [パラメータで渡されてきたability_id]
+  # 更新無しの場合、配列が返る
   #
   # privateメソッドでもいいような気がするが、
   # 正しく削除するidを取得してるかテストしたかった
@@ -97,10 +98,14 @@ class Role < ActiveRecord::Base
   # パラメータで渡されたability_idを配列で返す
   #
   def params_to_array(params)
-    raise ArgumentError unless params.include?("roles_abilities_attributes")
+    raise ArgumentError if attrs_is_invalid?(params)
     params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
   rescue ArgumentError
     errors.add "Ability", "権限は1件以上選択してください"
     raise ActiveRecord::Rollback
+  end
+
+  def attrs_is_invalid?(attrs)
+    !attrs.include?("roles_abilities_attributes") or attrs["roles_abilities_attributes"].blank?
   end
 end
