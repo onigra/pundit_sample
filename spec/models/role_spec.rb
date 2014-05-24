@@ -48,11 +48,7 @@ describe Role do
     }
   end
 
-  let(:not_include_roles_abilities_attributes) do
-    {
-      "name" => "fuga"
-    }
-  end
+  let(:not_include_roles_abilities_attributes) { { "name" => "fuga" } }
 
   describe 'relationship' do
     it { should have_one(:user) }
@@ -237,8 +233,18 @@ describe Role do
       end
 
       context "roles_abilities_attributesが無い" do
+        let(:attrs) { { "name" => "fuga" } }
+
         it "return false" do
-          expect(user_role.destroy_and_update not_include_roles_abilities_attributes).to be_false
+          expect(user_role.destroy_and_update attrs).to be_false
+        end
+      end
+
+      context "roles_abilities_attributesが空" do
+        let(:attrs) { { "name" => "fuga", "roles_abilities_attributes" => [] } }
+
+        it "return false" do
+          expect(user_role.destroy_and_update attrs).to be_false
         end
       end
     end
