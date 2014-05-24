@@ -33,10 +33,10 @@ class Role < ActiveRecord::Base
   #   * 新しく作成するものは新規作成
   #   * 既にあるものは何もしない
   #
-  def destroy_and_update(params)
+  def destroy_and_update(attrs)
     ActiveRecord::Base.transaction do
-      destroy_old_abilities(params)
-      raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id params)
+      destroy_old_abilities(attrs)
+      raise ActiveRecord::Rollback unless update(push_current_roles_abilities_id attrs)
       reload
       true
     end
@@ -47,29 +47,29 @@ class Role < ActiveRecord::Base
   end
 
   #
-  # paramsのability_idに現在のability_idが入っていた場合、
+  # attrsのability_idに現在のability_idが入っていた場合、
   # hashにroles_abilities.idを追加する
   #
   # 更新時のリクエストパラメータもability_idのみだが、
   # 既に存在するability_idが入ってるレコードには何もしたくない。
   # そのため、updateを呼ぶ際にroles_abilities.idを追加する。
   #
-  def push_current_roles_abilities_id(params)
-    params["roles_abilities_attributes"].each do |item|
+  def push_current_roles_abilities_id(attrs)
+    attrs["roles_abilities_attributes"].each do |item|
       if index_by_ability_id.include? item["ability_id"].to_i
         item["id"] = index_by_ability_id[item["ability_id"].to_i].id.to_s
       end
     end
 
-    params
+    attrs
   end
 
   #
   # 削除するability_idがインスタンスのroles_abilities.ability_idと
   # 一致していたら物理削除
   #
-  def destroy_old_abilities(params)
-    destroy_id = get_destroy_id(params)
+  def destroy_old_abilities(attrs)
+    destroy_id = get_destroy_id(attrs)
 
     unless destroy_id.blank?
       RolesAbility.where(role_id: id).where(ability_id: destroy_id).delete_all
@@ -84,8 +84,8 @@ class Role < ActiveRecord::Base
   # privateメソッドでもいいような気がするが、
   # 正しく削除するidを取得してるかテストしたかった
   #
-  def get_destroy_id(params)
-    ability_id_to_a - params_to_array(params)
+  def get_destroy_id(attrs)
+    ability_id_to_a - attrs_to_array(attrs)
   end
 
   scope :except_admin, -> {
@@ -97,9 +97,9 @@ class Role < ActiveRecord::Base
   #
   # パラメータで渡されたability_idを配列で返す
   #
-  def params_to_array(params)
-    raise ArgumentError if attrs_is_invalid?(params)
-    params["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
+  def attrs_to_array(attrs)
+    raise ArgumentError if attrs_is_invalid?(attrs)
+    attrs["roles_abilities_attributes"].map{ |item| item["ability_id"].to_i }
   rescue ArgumentError
     errors.add "Ability", "権限は1件以上選択してください"
     raise ActiveRecord::Rollback
