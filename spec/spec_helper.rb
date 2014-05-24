@@ -9,12 +9,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
-Fabrication.configure do |config|
-  config.fabricator_path = 'spec/fabricators'
-  config.path_prefix = Rails.root
-  config.sequence_start = 1
-end
-
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

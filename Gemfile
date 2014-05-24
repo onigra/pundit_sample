@@ -46,7 +46,6 @@ group :test, :development do
   gem 'accept_values_for'
 
   gem 'database_rewinder'
-  gem 'fabrication'
   gem 'factory_girl_rails'
   gem 'forgery'
 
