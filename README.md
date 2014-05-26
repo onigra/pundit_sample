@@ -19,6 +19,6 @@ bin/rails s
 |:---:|:------:|:--:|
 |admin@example.com|adminadmin|管理者|
 |user@example.com|useruser|usersのCRUDが可能|
-|role@example.com|rolerole|usersの権限無し|
+|role@example.com|rolerole|rolesのCRUDが可能|
 |view@example.com|viewview|usersの閲覧のみ可能|
 
