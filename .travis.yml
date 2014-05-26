@@ -1,0 +1,13 @@
+language: ruby
+rvm:
+  - 2.1.2
+env:
+  - DB=mysql
+before_script:
+  - mysql -e 'create database pundit_sample_test;'
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate
+  - bundle exec rake spec
+notifications:
+  on_success: always
+  on_failure: always
