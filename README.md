@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/onigra/pundit_sample.svg?branch=travis)](https://travis-ci.org/onigra/pundit_sample) [![Coverage Status](https://coveralls.io/repos/onigra/pundit_sample/badge.png?branch=travis)](https://coveralls.io/r/onigra/pundit_sample?branch=travis) [![Code Climate](https://codeclimate.com/github/onigra/pundit_sample.png)](https://codeclimate.com/github/onigra/pundit_sample)
+
 # setup
 
 ```sh
