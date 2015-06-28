@@ -16,9 +16,9 @@ $ git clone https://github.com/onigra/pundit_sample.git
 $ cd pundit_sample
 $ bundle install
 
-$ bundle exec db:create
-$ bundle exec db:migrate
-$ bundle exec db:seed_fu
+$ bundle exec rake db:create
+$ bundle exec rake db:migrate
+$ bundle exec rake db:seed_fu
 $ bundle exec s
 ```
 
